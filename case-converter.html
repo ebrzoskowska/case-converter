@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> Case Converter </title>
+
+    <!--JS libraries-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Lucida Console", Monaco, monospace;
+        background-color: #000;
+        color: #FFF;
+      }
+
+      .wrapper {
+        margin: 0 auto;
+        max-width: 600px;
+        display: flex;
+        flex-flow: column wrap;
+        align-items: center;
+        padding-bottom: 30px;
+      }
+
+      .title {
+        font-size: 2em;
+        padding: 20px;
+        text-transform: uppercase;
+      }
+
+      textarea {
+        background-color: #000;
+        color: #FFF;
+        width: 90%;
+        font-size: 2em;
+      }
+
+      .button_wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .button_slide {
+        display: flex;
+        width: 13em;
+        background-color: #000;
+        color: #FFF;
+        border: 2px solid rgb(216, 2, 134);
+        border-radius: 0;
+        padding: 18px 36px;
+        display: inline-block;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        margin: 5px;
+        box-shadow: inset 0 0 0 0 #D80286;
+        -webkit-transition: ease-out 0.4s;
+        -moz-transition: ease-out 0.4s;
+        transition: ease-out 0.4s;
+      }
+
+      .slide_down:hover {
+        box-shadow: inset 0 100px 0 0 #D80286;
+      }
+
+      @media (max-width: 385px) {
+        .title {
+          font-size: 1.7em;
+        }
+
+        textarea {
+          width: 80%;
+        }
+
+        .button_slide {
+          width: 80%;
+        }
+      }  
+
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+
+      <h1 class="title">Case Converter</h1>
+      <textarea id="user_input" name="something" cols="30" rows="10" type="text"></textarea>
+
+      <div class="button_wrapper">
+        <button class="button_slide slide_down" id="upper-case"> UPPER </button>
+        <button class="button_slide slide_down" id="lower-case"> LOWER </button>
+        <button class="button_slide slide_down" id="proper-case"> PROPER </button>
+        <button class="button_slide slide_down" id="sentence-case"> SENTENCE </button>
+        <button class="button_slide slide_down" id="clear-btn"> CLEAR </button>
+        <button class="button_slide slide_down" id="save-text-file">SAVE TXT FILE </button>     
+      </div>
+
+<!-- OR -->
+<!-- <button class="button_slide slide_down" id="save-text-file">
+  <a href="" download="text.txt"> SAVE TXT </a>
+</button>  -->
+    </div>
+    <script>
+
+      const upperBtn = document.getElementById('upper-case');
+      const lowBtn = document.getElementById('lower-case');
+      const propBtn = document.getElementById('proper-case');
+      const sntcBtn = document.getElementById('sentence-case');
+      const clearBtn = document.getElementById('clear-btn');
+
+      upperBtn.addEventListener("click", () => {
+        let output = document.getElementById('user_input').value.toString().toLocaleUpperCase();
+        document.getElementById('user_input').value = '';
+        document.getElementById('user_input').value = output;
+      });
+
+      lowBtn.addEventListener("click", () => {
+        let output = document.getElementById('user_input').value.toString().toLocaleLowerCase();
+        document.getElementById('user_input').value = '';
+        document.getElementById('user_input').value = output;
+      });
+
+      propBtn.addEventListener("click", () => {
+        let output = document.getElementById('user_input').value.toString().toLocaleLowerCase();
+        let outputArr = output.split(' ');
+        let newStr = "";
+
+        for(let i = 0; i < outputArr.length; i++)
+        {
+          outputArr[i]= outputArr[i].charAt(0).toUpperCase() + outputArr[i].slice(1);
+        }
+        newStr += outputArr.join(" ");
+        document.getElementById('user_input').value = '';
+        document.getElementById('user_input').value = newStr.trim();
+      });
+
+      sntcBtn.addEventListener("click", () => {
+        let output = document.getElementById('user_input').value.toString().toLocaleLowerCase();
+        let outputArr = output.replace(/\s\s+/g, ' ').split(/\.\s|\./g);
+        let newStr = "";
+
+        for(let i = 0; i < outputArr.length; i++) {
+          outputArr[i] = outputArr[i].charAt(0).toUpperCase() + outputArr[i].slice(1);
+        }
+        newStr += outputArr.join(". ");
+        document.getElementById('user_input').value = '';
+        document.getElementById('user_input').value = newStr.trim();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        document.getElementById('user_input').value = '';
+      });
+
+      function download(filename, text) {
+        let element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
+
+      document.getElementById("save-text-file").addEventListener("click", function(){
+        let text = document.getElementById("user_input").value;
+        let filename = "text.txt";
+        download(filename, text);
+      }, false);
+
+// or
+// $('#save-text-file').click(function(){
+//   var data = $('#user_input').val();
+//   this.href = "data:text/plain;charset=UTF-8,"  + encodeURIComponent(data);
+// });
+    </script>
+  </body>
+</html>
